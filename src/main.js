@@ -55,11 +55,15 @@ function renderTaskTable() {
 }
 
 
-// Render Gantt chart
+// Define available zoom levels
+const viewModes = ["Hour", "Day", "Week", "Month", "Quarter"];
+let currentViewIndex = 1; // default: "Day"
+
+// Modified renderGantt to use current view mode
 function renderGantt() {
     ganttContainer.innerHTML = "";
     new Gantt(ganttContainer, tasks, {
-        view_mode: "Day",
+        view_mode: viewModes[currentViewIndex],
         date_format: "YYYY-MM-DD",
         row_height: ROW_HEIGHT,
         custom_popup_html: task => `
@@ -74,29 +78,18 @@ function renderGantt() {
     });
 }
 
-// Render both table and chart
-function renderAll() {
-    renderTaskTable();
-    renderGantt();
-}
-
-// Initial render
-document.addEventListener("DOMContentLoaded", () => {
-    renderAll();
+// Zoom In
+document.getElementById("zoom-in").addEventListener("click", () => {
+    if (currentViewIndex > 0) {
+        currentViewIndex--;
+        renderGantt();
+    }
 });
 
-// Add new task via form
-document.getElementById("task-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const name = document.getElementById("task-name").value;
-    const person = document.getElementById("task-person").value;
-    const start = document.getElementById("task-start").value;
-    const end = document.getElementById("task-end").value;
-    const progressInput = document.getElementById("task-progress").value;
-    const progress = progressInput ? Math.min(Math.max(parseInt(progressInput), 0), 100) : 0;
-    const id = "Task" + (tasks.length + 1);
-
-    tasks.push({ id, name, start, end, progress, person });
-    renderAll();
-    this.reset();
+// Zoom Out
+document.getElementById("zoom-out").addEventListener("click", () => {
+    if (currentViewIndex < viewModes.length - 1) {
+        currentViewIndex++;
+        renderGantt();
+    }
 });
