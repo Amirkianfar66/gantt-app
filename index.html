@@ -33,7 +33,7 @@
             border: 1px solid #ddd;
         }
 
-        /* Task table styles */
+        /* Left task table */
         #task-table {
             width: 450px;
             border-right: 1px solid #ddd;
@@ -71,7 +71,7 @@
                 background: #ff1a1a;
             }
 
-        /* Gantt chart container */
+        /* Right Gantt chart */
         #gantt-container {
             flex: 1;
             display: flex;
@@ -101,9 +101,9 @@
         <button type="submit">Add Task</button>
     </form>
 
-    <!-- Main Container: Table + Gantt -->
+    <!-- Main container -->
     <div id="container">
-        <!-- Left Task Table -->
+        <!-- Left task table -->
         <div id="task-table">
             <table id="task-table-inner">
                 <thead>
@@ -120,7 +120,7 @@
             </table>
         </div>
 
-        <!-- Right Gantt Chart -->
+        <!-- Right Gantt chart -->
         <div id="gantt-container">
             <div id="gantt"></div>
             <div id="zoom-controls">
