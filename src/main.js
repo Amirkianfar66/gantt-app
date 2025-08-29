@@ -1,6 +1,8 @@
 import Gantt from "frappe-gantt";
 import "./frappe-gantt.css";
 
+const ROW_HEIGHT = 35;
+
 let tasks = [
     { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
     { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
@@ -8,8 +10,6 @@ let tasks = [
 
 const ganttContainer = document.getElementById("gantt");
 const taskTableBody = document.querySelector("#task-table-inner tbody");
-
-const ROW_HEIGHT = 35;
 
 function renderTaskTable() {
     taskTableBody.innerHTML = "";
@@ -21,13 +21,12 @@ function renderTaskTable() {
     });
 }
 
-function renderGanttAndTasks() {
+function renderGantt() {
     ganttContainer.innerHTML = "";
     new Gantt(ganttContainer, tasks, {
         view_mode: "Day",
         date_format: "YYYY-MM-DD",
         row_height: ROW_HEIGHT,
-        on_render: renderTaskTable, // left table rendered after Gantt layout
         custom_popup_html: task => `
       <div style="padding:10px;">
         <h5>${task.name}</h5>
@@ -40,9 +39,14 @@ function renderGanttAndTasks() {
     });
 }
 
+function renderAll() {
+    renderTaskTable();
+    renderGantt();
+}
+
 // Initial render
 document.addEventListener("DOMContentLoaded", () => {
-    renderGanttAndTasks();
+    renderAll();
 });
 
 // Add new task
@@ -55,6 +59,6 @@ document.getElementById("task-form").addEventListener("submit", function (e) {
     const id = "Task" + (tasks.length + 1);
 
     tasks.push({ id, name, start, end, progress: 0, person });
-    renderGanttAndTasks();
+    renderAll();
     this.reset();
 });
