@@ -27,7 +27,9 @@
         /* Container for table + Gantt */
         #container {
             display: flex;
-            height: 600px; /* fixed chart height */
+            flex-direction: column; /* table above chart */
+            height: auto;
+            margin-top: 50px;
         }
 
         /* Task table styles */
@@ -52,7 +54,7 @@
         }
 
         td[contenteditable="true"] {
-            background: #fffbe6;
+            background: #ffffff;
             cursor: text;
         }
 
@@ -82,8 +84,8 @@
                     <tr>
                         <th>Task</th>
                         <th>Person</th>
-                        <th>Start</th>
-                        <th>End</th>
+                        <th>Start Task</th>
+                        <th>End Task</th>
                         <th>Progress</th>
                     </tr>
                 </thead>
@@ -98,8 +100,8 @@
                 <tr>
                     <th>Task</th>
                     <th>Person</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Start Task</th>
+                    <th>End Task</th>
                     <th>Progress</th>
                     <th>Delete</th>
                 </tr>
