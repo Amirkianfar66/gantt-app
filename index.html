@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gantt with Left Task List</title>
-    <link rel="stylesheet" href="https://unpkg.com/frappe-gantt/dist/frappe-gantt.css" />
+    <title>Gantt with Task List</title>
+    <link rel="stylesheet" href="/src/frappe-gantt.css">
     <style>
         body {
             margin: 0;
@@ -26,6 +26,7 @@
         #container {
             display: flex;
             border-top: 1px solid #ddd;
+            height: 600px;
         }
 
         #task-list {
@@ -34,6 +35,7 @@
             padding: 10px;
             box-sizing: border-box;
             position: relative;
+            overflow: hidden;
         }
 
         .task-item {
@@ -44,11 +46,12 @@
             box-sizing: border-box;
             font-size: 13px;
             border-bottom: 1px dotted #ccc;
+            background: #f9f9f9;
         }
 
         #gantt {
             flex: 1;
-            overflow-x: auto;
+            overflow: auto;
         }
     </style>
 </head>
@@ -67,65 +70,6 @@
         <div id="gantt"></div>
     </div>
 
-    <script type="module">
-        import Gantt from "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.esm.js";
-
-        let tasks = [
-            { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
-            { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
-        ];
-
-        const ganttContainer = document.getElementById("gantt");
-        const taskListContainer = document.getElementById("task-list");
-
-        function renderGanttAndTasks() {
-            ganttContainer.innerHTML = "";
-            taskListContainer.innerHTML = "";
-
-            const gantt = new Gantt(ganttContainer, tasks, {
-                view_mode: "Day",
-                date_format: "YYYY-MM-DD",
-                custom_popup_html: task => `
-          <div style="padding:10px;">
-            <h5>${task.name}</h5>
-            <p><strong>Assigned to:</strong> ${task.person}</p>
-            <p><strong>Start:</strong> ${task.start}</p>
-            <p><strong>End:</strong> ${task.end}</p>
-            <p><strong>Progress:</strong> ${task.progress}%</p>
-          </div>
-        `
-            });
-
-            // After bars are rendered, position task items
-            tasks.forEach((task, i) => {
-                const bar = ganttContainer.querySelector(`.bar[task_id="${task.id}"]`);
-                if (bar) {
-                    const y = bar.getBoundingClientRect().top - ganttContainer.getBoundingClientRect().top;
-                    const div = document.createElement("div");
-                    div.className = "task-item";
-                    div.style.top = y + "px";
-                    div.textContent = task.name + " (" + task.person + ")";
-                    taskListContainer.appendChild(div);
-                }
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", renderGanttAndTasks);
-
-        // Task creation
-        document.getElementById("task-form").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const name = document.getElementById("task-name").value;
-            const person = document.getElementById("task-person").value;
-            const start = document.getElementById("task-start").value;
-            const end = document.getElementById("task-end").value;
-            const id = "Task" + (tasks.length + 1);
-
-            tasks.push({ id, name, start, end, progress: 0, person });
-            renderGanttAndTasks();
-            this.reset();
-        });
-    </script>
-
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>
