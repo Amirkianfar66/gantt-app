@@ -1,4 +1,4 @@
-import Gantt from "frappe-gantt";
+﻿import Gantt from "frappe-gantt";
 import "./frappe-gantt.css";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -45,8 +45,77 @@ document.addEventListener("DOMContentLoaded", () => {
             const row = document.createElement("tr");
             row.style.height = ROW_HEIGHT + "px";
 
+            // ✅ Fixed template literal
             row.innerHTML = `
         <td contenteditable="true" data-field="name">${task.name}</td>
         <td contenteditable="true" data-field="person">${task.person}</td>
         <td contenteditable="true" data-field="start">${task.start}</td>
-        <td contenteditable="true" data-field="end">${task
+        <td contenteditable="true" data-field="end">${task.end}</td>
+        <td contenteditable="true" data-field="progress">${task.progress}</td>
+        <td><button class="delete-btn">X</button></td>
+      `;
+
+            // Editable cells
+            row.querySelectorAll("td[contenteditable='true']").forEach(td => {
+                td.addEventListener("blur", () => {
+                    const field = td.dataset.field;
+                    let value = td.innerText.trim();
+                    if (field === "progress") value = Math.min(Math.max(parseInt(value) || 0, 0), 100);
+                    tasks[index][field] = value;
+                    renderGantt();
+                });
+            });
+
+            // Delete button
+            row.querySelector(".delete-btn").addEventListener("click", () => {
+                tasks.splice(index, 1);
+                renderAll();
+            });
+
+            taskTableBody.appendChild(row);
+        });
+    }
+
+    // Render table + Gantt
+    function renderAll() {
+        renderTaskTable();
+        renderGantt();
+    }
+
+    // Add task
+    const taskForm = document.getElementById("task-form");
+    taskForm.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const name = document.getElementById("task-name").value.trim();
+        const person = document.getElementById("task-person").value.trim();
+        const start = document.getElementById("task-start").value;
+        const end = document.getElementById("task-end").value;
+        const progress = parseInt(document.getElementById("task-progress").value) || 0;
+
+        const newTaskId = "Task" + (tasks.length + 1);
+
+        tasks.push({ id: newTaskId, name, person, start, end, progress });
+
+        renderAll();
+        taskForm.reset();
+    });
+
+    // Zoom
+    document.getElementById("zoom-in").addEventListener("click", () => {
+        if (currentViewIndex > 0) {
+            currentViewIndex--;
+            renderGantt();
+        }
+    });
+
+    document.getElementById("zoom-out").addEventListener("click", () => {
+        if (currentViewIndex < viewModes.length - 1) {
+            currentViewIndex++;
+            renderGantt();
+        }
+    });
+
+    // Initial render
+    renderAll();
+});
