@@ -10,6 +10,7 @@
             font-family: sans-serif;
         }
 
+        /* Add task form */
         #task-form {
             padding: 10px;
             background: #f5f5f5;
@@ -23,13 +24,15 @@
                 font-size: 14px;
             }
 
+        /* Container for table + Gantt */
         #container {
             display: flex;
-            height: 600px; /* fixed height */
+            height: 600px; /* fixed chart height */
         }
 
+        /* Task table styles */
         #task-table {
-            width: 250px;
+            width: 300px;
             border-right: 1px solid #ddd;
             overflow: auto;
             background: #f9f9f9;
@@ -48,6 +51,7 @@
             top: 0;
         }
 
+        /* Gantt chart container */
         #gantt {
             flex: 1;
             overflow: auto;
@@ -62,6 +66,7 @@
         <input type="text" id="task-person" placeholder="Assigned To" required />
         <input type="date" id="task-start" required />
         <input type="date" id="task-end" required />
+        <input type="number" id="task-progress" placeholder="Progress %" min="0" max="100" />
         <button type="submit">Add Task</button>
     </form>
 
@@ -72,6 +77,9 @@
                     <tr>
                         <th>Task</th>
                         <th>Person</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Progress</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
