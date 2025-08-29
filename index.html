@@ -8,10 +8,8 @@
         body {
             margin: 0;
             font-family: sans-serif;
-            background: #f9f9f9;
         }
 
-        /* Add task form */
         #task-form {
             padding: 10px;
             background: #f5f5f5;
@@ -25,20 +23,17 @@
                 font-size: 14px;
             }
 
-        /* Container for table + Gantt */
         #container {
             display: flex;
             height: 600px;
             margin-top: 20px;
-            border: 1px solid #ddd;
         }
 
-        /* Left task table */
         #task-table {
             width: 450px;
             border-right: 1px solid #ddd;
             overflow: auto;
-            background: #fff;
+            background: #f9f9f9;
         }
 
         #task-table-inner th, #task-table-inner td {
@@ -59,28 +54,10 @@
             cursor: text;
         }
 
-        .delete-btn {
-            background: #ff4d4d;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 2px 5px;
-        }
-
-            .delete-btn:hover {
-                background: #ff1a1a;
-            }
-
-        /* Right Gantt chart */
-        #gantt-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
         #gantt {
             flex: 1;
             overflow: auto;
+            height: 100%;
         }
 
         #zoom-controls {
@@ -91,7 +68,6 @@
 </head>
 <body>
 
-    <!-- Task Add Form -->
     <form id="task-form">
         <input type="text" id="task-name" placeholder="Task Name" required />
         <input type="text" id="task-person" placeholder="Assigned To" required />
@@ -101,9 +77,7 @@
         <button type="submit">Add Task</button>
     </form>
 
-    <!-- Main container -->
     <div id="container">
-        <!-- Left task table -->
         <div id="task-table">
             <table id="task-table-inner">
                 <thead>
@@ -119,15 +93,12 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div id="gantt"></div>
+    </div>
 
-        <!-- Right Gantt chart -->
-        <div id="gantt-container">
-            <div id="gantt"></div>
-            <div id="zoom-controls">
-                <button id="zoom-out">- Zoom Out</button>
-                <button id="zoom-in">+ Zoom In</button>
-            </div>
-        </div>
+    <div id="zoom-controls">
+        <button id="zoom-out">- Zoom Out</button>
+        <button id="zoom-in">+ Zoom In</button>
     </div>
 
     <script type="module" src="/src/main.js"></script>

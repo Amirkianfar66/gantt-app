@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ROW_HEIGHT = 35;
 
-    // Initial tasks
     let tasks = [
         { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
         { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
@@ -14,11 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const ganttContainer = document.getElementById("gantt");
     const taskTableBody = document.querySelector("#task-table-inner tbody");
 
-    // Zoom levels
     const viewModes = ["Hour", "Day", "Week", "Month", "Quarter"];
     let currentViewIndex = 1;
 
-    // Render Gantt chart
     function renderGantt() {
         ganttContainer.innerHTML = "";
         new Gantt(ganttContainer, tasks, {
@@ -37,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Render task table
     function renderTaskTable() {
         taskTableBody.innerHTML = "";
 
@@ -45,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const row = document.createElement("tr");
             row.style.height = ROW_HEIGHT + "px";
 
-            // ✅ Fixed template literal
             row.innerHTML = `
         <td contenteditable="true" data-field="name">${task.name}</td>
         <td contenteditable="true" data-field="person">${task.person}</td>
@@ -55,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <td><button class="delete-btn">X</button></td>
       `;
 
-            // Editable cells
+            // Editable fields
             row.querySelectorAll("td[contenteditable='true']").forEach(td => {
                 td.addEventListener("blur", () => {
                     const field = td.dataset.field;
@@ -66,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
-            // Delete button
+            // Delete task
             row.querySelector(".delete-btn").addEventListener("click", () => {
                 tasks.splice(index, 1);
                 renderAll();
@@ -76,15 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Render table + Gantt
     function renderAll() {
         renderTaskTable();
         renderGantt();
     }
 
-    // Add task
-    const taskForm = document.getElementById("task-form");
-    taskForm.addEventListener("submit", e => {
+    // Add new task
+    document.getElementById("task-form").addEventListener("submit", e => {
         e.preventDefault();
 
         const name = document.getElementById("task-name").value.trim();
@@ -96,12 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const newTaskId = "Task" + (tasks.length + 1);
 
         tasks.push({ id: newTaskId, name, person, start, end, progress });
-
         renderAll();
-        taskForm.reset();
+        e.target.reset();
     });
 
-    // Zoom
+    // Zoom controls
     document.getElementById("zoom-in").addEventListener("click", () => {
         if (currentViewIndex > 0) {
             currentViewIndex--;
@@ -116,6 +108,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Initial render
     renderAll();
 });
