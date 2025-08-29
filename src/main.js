@@ -42,8 +42,10 @@ function renderGanttAndTasks() {
     });
 }
 
-// Initial render
-document.addEventListener("DOMContentLoaded", renderGanttAndTasks);
+// Initial render after DOM ready
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(renderGanttAndTasks, 50); // ensure DOM and CSS are applied
+});
 
 // Task creation
 document.getElementById("task-form").addEventListener("submit", function (e) {

@@ -26,15 +26,8 @@
         #container {
             display: flex;
             border-top: 1px solid #ddd;
-            height: 600px; /* <-- add this */
+            height: 600px; /* fixed height for chart */
         }
-
-        #gantt {
-            flex: 1;
-            overflow: auto;
-            height: 100%; /* <-- ensure it fills the parent */
-        }
-
 
         #task-list {
             width: 200px;
@@ -59,6 +52,7 @@
         #gantt {
             flex: 1;
             overflow: auto;
+            height: 100%; /* fill parent height */
         }
     </style>
 </head>
