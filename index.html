@@ -2,81 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Frappe Gantt with Task Table</title>
-    <link rel="stylesheet" href="https://unpkg.com/frappe-gantt/dist/frappe-gantt.css" />
-    <style>
-        body {
-            margin: 0;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #task-form {
-            padding: 10px;
-            background: #f5f5f5;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-            #task-form input {
-                padding: 5px;
-                font-size: 14px;
-            }
-
-            #task-form button {
-                padding: 6px 12px;
-                font-size: 14px;
-                cursor: pointer;
-            }
-
-        #container {
-            display: flex;
-            gap: 20px;
-            padding: 10px;
-        }
-
-        #gantt {
-            flex: 2;
-            height: 600px;
-            border: 1px solid #ddd;
-        }
-
-        #task-table {
-            flex: 1;
-            border-collapse: collapse;
-            width: 100%;
-            max-height: 600px;
-            overflow-y: auto;
-            display: block;
-        }
-
-            #task-table th, #task-table td {
-                border: 1px solid #ccc;
-                padding: 6px;
-                text-align: left;
-                font-size: 14px;
-            }
-
-            #task-table th {
-                background: #eee;
-                position: sticky;
-                top: 0;
-            }
-
-        .delete-btn {
-            cursor: pointer;
-            color: red;
-            border: none;
-            background: none;
-        }
-    </style>
+    <title>Interactive Gantt App</title>
+    <link rel="stylesheet" href="/src/main.css">
 </head>
 <body>
 
-    <!-- Task creation form -->
     <form id="task-form">
         <input type="text" id="task-name" placeholder="Task Name" required />
         <input type="text" id="task-person" placeholder="Assigned To" required />
@@ -85,12 +15,9 @@
         <button type="submit">Add Task</button>
     </form>
 
-    <div id="container">
-        <!-- Gantt Chart -->
-        <div id="gantt"></div>
-
-        <!-- Task Table -->
-        <table id="task-table">
+    <div id="container" style="display:flex; gap:20px; padding:10px;">
+        <div id="gantt" style="flex:2; height:600px;"></div>
+        <table id="task-table" style="flex:1; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -105,82 +32,6 @@
         </table>
     </div>
 
-    <!-- Main JS -->
-    <script type="module">
-        import Gantt from "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.esm.js";
-
-        let tasks = [
-            { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
-            { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
-        ];
-
-        const ganttContainer = document.getElementById("gantt");
-        const tableBody = document.querySelector("#task-table tbody");
-
-        function renderGantt() {
-            ganttContainer.innerHTML = "";
-            new Gantt(ganttContainer, tasks, {
-                view_mode: "Day",
-                date_format: "YYYY-MM-DD",
-                custom_popup_html: task => `
-                  <div style="padding:10px;">
-                    <h5>${task.name}</h5>
-                    <p><strong>Assigned to:</strong> ${task.person || "Unassigned"}</p>
-                    <p><strong>Start:</strong> ${task.start}</p>
-                    <p><strong>End:</strong> ${task.end}</p>
-                    <p><strong>Progress:</strong> ${task.progress}%</p>
-                  </div>
-                `
-            });
-        }
-
-        function renderTable() {
-            tableBody.innerHTML = "";
-            tasks.forEach((task, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                  <td>${task.name}</td>
-                  <td>${task.person}</td>
-                  <td>${task.start}</td>
-                  <td>${task.end}</td>
-                  <td>${task.progress}%</td>
-                  <td><button class="delete-btn" data-index="${index}">×</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            // Attach delete listeners
-            document.querySelectorAll(".delete-btn").forEach(btn => {
-                btn.addEventListener("click", e => {
-                    const i = e.target.dataset.index;
-                    tasks.splice(i, 1);
-                    renderGantt();
-                    renderTable();
-                });
-            });
-        }
-
-        function renderAll() {
-            renderGantt();
-            renderTable();
-        }
-
-        document.addEventListener("DOMContentLoaded", renderAll);
-
-        // Task form submission
-        document.getElementById("task-form").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const name = document.getElementById("task-name").value;
-            const person = document.getElementById("task-person").value;
-            const start = document.getElementById("task-start").value;
-            const end = document.getElementById("task-end").value;
-            const id = "Task" + (tasks.length + 1);
-
-            tasks.push({ id, name, start, end, progress: 0, person });
-            renderAll();
-            this.reset();
-        });
-    </script>
-
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>
