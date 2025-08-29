@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Interactive Frappe Gantt</title>
-    <link rel="stylesheet" href="https://unpkg.com/frappe-gantt/dist/frappe-gantt.css" />
+    <link rel="stylesheet" href="/node_modules/frappe-gantt/dist/frappe-gantt.css" />
     <style>
         body {
             margin: 0;
@@ -16,30 +16,17 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            align-items: center;
         }
-
-            #task-form input {
-                padding: 5px;
-                font-size: 14px;
-            }
-
-            #task-form button {
-                padding: 6px 12px;
-                font-size: 14px;
-                cursor: pointer;
-            }
 
         #gantt {
             width: 100%;
-            height: 600px; /* fixed height ensures chart renders */
+            height: 600px;
             border-top: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
 
-    <!-- Task creation form -->
     <form id="task-form">
         <input type="text" id="task-name" placeholder="Task Name" required />
         <input type="text" id="task-person" placeholder="Assigned To" required />
@@ -48,56 +35,9 @@
         <button type="submit">Add Task</button>
     </form>
 
-    <!-- Gantt chart container -->
     <div id="gantt"></div>
 
-    <!-- Main JS -->
-    <script type="module">
-        import Gantt from "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.esm.js";
-
-        let tasks = [
-            { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
-            { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
-        ];
-
-        function renderGantt() {
-            const ganttContainer = document.getElementById("gantt");
-            // Clear previous chart
-            ganttContainer.innerHTML = "";
-
-            new Gantt(ganttContainer, tasks, {
-                view_mode: "Day",
-                date_format: "YYYY-MM-DD",
-                custom_popup_html: task => `
-              <div style="padding:10px;">
-                <h5>${task.name}</h5>
-                <p><strong>Assigned to:</strong> ${task.person || "Unassigned"}</p>
-                <p><strong>Start:</strong> ${task.start}</p>
-                <p><strong>End:</strong> ${task.end}</p>
-                <p><strong>Progress:</strong> ${task.progress}%</p>
-              </div>
-            `
-            });
-        }
-
-        // Initial render
-        document.addEventListener("DOMContentLoaded", renderGantt);
-
-        // Handle form submission
-        document.getElementById("task-form").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const name = document.getElementById("task-name").value;
-            const person = document.getElementById("task-person").value;
-            const start = document.getElementById("task-start").value;
-            const end = document.getElementById("task-end").value;
-            const id = "Task" + (tasks.length + 1);
-
-            tasks.push({ id, name, start, end, progress: 0, person });
-
-            renderGantt(); // Re-render chart
-            this.reset();   // Clear form
-        });
-    </script>
+    <script type="module" src="/src/main.js"></script>
 
 </body>
 </html>
