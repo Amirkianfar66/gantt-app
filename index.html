@@ -26,8 +26,15 @@
         #container {
             display: flex;
             border-top: 1px solid #ddd;
-            height: 600px;
+            height: 600px; /* <-- add this */
         }
+
+        #gantt {
+            flex: 1;
+            overflow: auto;
+            height: 100%; /* <-- ensure it fills the parent */
+        }
+
 
         #task-list {
             width: 200px;
