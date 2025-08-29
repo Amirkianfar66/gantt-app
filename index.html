@@ -2,8 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Gantt App</title>
-    <link rel="stylesheet" href="/src/main.css">
+    <title>Gantt with Left Task List</title>
+    <link rel="stylesheet" href="https://unpkg.com/frappe-gantt/dist/frappe-gantt.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        #task-form {
+            padding: 10px;
+            background: #f5f5f5;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+            #task-form input, #task-form button {
+                padding: 5px;
+                font-size: 14px;
+            }
+
+        #container {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        #task-list {
+            width: 200px;
+            border-right: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .task-item {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            padding: 2px 4px;
+            box-sizing: border-box;
+            font-size: 13px;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        #gantt {
+            flex: 1;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,23 +62,70 @@
         <button type="submit">Add Task</button>
     </form>
 
-    <div id="container" style="display:flex; gap:20px; padding:10px;">
-        <div id="gantt" style="flex:2; height:600px;"></div>
-        <table id="task-table" style="flex:1; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Person</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Progress</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div id="container">
+        <div id="task-list"></div>
+        <div id="gantt"></div>
     </div>
 
-    <script type="module" src="/src/main.js"></script>
+    <script type="module">
+        import Gantt from "https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.esm.js";
+
+        let tasks = [
+            { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
+            { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
+        ];
+
+        const ganttContainer = document.getElementById("gantt");
+        const taskListContainer = document.getElementById("task-list");
+
+        function renderGanttAndTasks() {
+            ganttContainer.innerHTML = "";
+            taskListContainer.innerHTML = "";
+
+            const gantt = new Gantt(ganttContainer, tasks, {
+                view_mode: "Day",
+                date_format: "YYYY-MM-DD",
+                custom_popup_html: task => `
+          <div style="padding:10px;">
+            <h5>${task.name}</h5>
+            <p><strong>Assigned to:</strong> ${task.person}</p>
+            <p><strong>Start:</strong> ${task.start}</p>
+            <p><strong>End:</strong> ${task.end}</p>
+            <p><strong>Progress:</strong> ${task.progress}%</p>
+          </div>
+        `
+            });
+
+            // After bars are rendered, position task items
+            tasks.forEach((task, i) => {
+                const bar = ganttContainer.querySelector(`.bar[task_id="${task.id}"]`);
+                if (bar) {
+                    const y = bar.getBoundingClientRect().top - ganttContainer.getBoundingClientRect().top;
+                    const div = document.createElement("div");
+                    div.className = "task-item";
+                    div.style.top = y + "px";
+                    div.textContent = task.name + " (" + task.person + ")";
+                    taskListContainer.appendChild(div);
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", renderGanttAndTasks);
+
+        // Task creation
+        document.getElementById("task-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = document.getElementById("task-name").value;
+            const person = document.getElementById("task-person").value;
+            const start = document.getElementById("task-start").value;
+            const end = document.getElementById("task-end").value;
+            const id = "Task" + (tasks.length + 1);
+
+            tasks.push({ id, name, start, end, progress: 0, person });
+            renderGanttAndTasks();
+            this.reset();
+        });
+    </script>
+
 </body>
 </html>
