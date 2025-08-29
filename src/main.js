@@ -1,5 +1,6 @@
+import "./frappe-gantt.css"; // now local copy
 import Gantt from "frappe-gantt";
-import "frappe-gantt/dist/frappe-gantt.css";
+
 
 let tasks = [
     { id: "Task1", name: "Redesign Website", start: "2025-08-01", end: "2025-08-10", progress: 30, person: "Alice" },
