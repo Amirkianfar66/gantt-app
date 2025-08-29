@@ -7,19 +7,19 @@ let tasks = [
 ];
 
 const ganttContainer = document.getElementById("gantt");
-const taskListContainer = document.getElementById("task-list");
+const taskTable = document.getElementById("task-table");
 
-function renderTaskList(gantt) {
-    taskListContainer.innerHTML = "";
+function renderTaskTable(gantt) {
+    taskTable.innerHTML = "";
     tasks.forEach(task => {
         const bar = ganttContainer.querySelector(`.bar[task_id="${task.id}"]`);
         if (bar) {
             const y = bar.getBoundingClientRect().top - ganttContainer.getBoundingClientRect().top;
-            const div = document.createElement("div");
-            div.className = "task-item";
-            div.style.top = y + "px";
-            div.textContent = task.name + " (" + task.person + ")";
-            taskListContainer.appendChild(div);
+            const row = document.createElement("div");
+            row.className = "task-row";
+            row.style.top = y + "px";
+            row.textContent = `${task.name} (${task.person})`;
+            taskTable.appendChild(row);
         }
     });
 }
@@ -29,7 +29,7 @@ function renderGanttAndTasks() {
     const gantt = new Gantt(ganttContainer, tasks, {
         view_mode: "Day",
         date_format: "YYYY-MM-DD",
-        on_render: () => renderTaskList(gantt),
+        on_render: () => renderTaskTable(gantt),
         custom_popup_html: task => `
       <div style="padding:10px;">
         <h5>${task.name}</h5>
@@ -44,7 +44,7 @@ function renderGanttAndTasks() {
 
 // Initial render after DOM ready
 document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(renderGanttAndTasks, 50); // ensure DOM and CSS are applied
+    setTimeout(renderGanttAndTasks, 50);
 });
 
 // Task creation
