@@ -32,7 +32,8 @@
 
         #gantt {
             width: 100%;
-            height: 80vh;
+            height: 600px; /* fixed height ensures chart renders */
+            border-top: 1px solid #ddd;
         }
     </style>
 </head>
@@ -59,10 +60,12 @@
             { id: "Task2", name: "Develop Backend", start: "2025-08-11", end: "2025-08-20", progress: 50, dependencies: "Task1", person: "Bob" }
         ];
 
-        let gantt;
-
         function renderGantt() {
-            gantt = new Gantt("#gantt", tasks, {
+            const ganttContainer = document.getElementById("gantt");
+            // Clear previous chart
+            ganttContainer.innerHTML = "";
+
+            new Gantt(ganttContainer, tasks, {
                 view_mode: "Day",
                 date_format: "YYYY-MM-DD",
                 custom_popup_html: task => `
@@ -78,7 +81,7 @@
         }
 
         // Initial render
-        renderGantt();
+        document.addEventListener("DOMContentLoaded", renderGantt);
 
         // Handle form submission
         document.getElementById("task-form").addEventListener("submit", function (e) {
