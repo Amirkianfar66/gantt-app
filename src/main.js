@@ -7,20 +7,15 @@ let tasks = [
 ];
 
 const ganttContainer = document.getElementById("gantt");
-const taskTable = document.getElementById("task-table");
+const taskTableBody = document.querySelector("#task-table-inner tbody");
 
-function renderTaskTable(gantt) {
-    taskTable.innerHTML = "";
+function renderTaskTable() {
+    taskTableBody.innerHTML = "";
     tasks.forEach(task => {
-        const bar = ganttContainer.querySelector(`.bar[task_id="${task.id}"]`);
-        if (bar) {
-            const y = bar.getBoundingClientRect().top - ganttContainer.getBoundingClientRect().top;
-            const row = document.createElement("div");
-            row.className = "task-row";
-            row.style.top = y + "px";
-            row.textContent = `${task.name} (${task.person})`;
-            taskTable.appendChild(row);
-        }
+        const row = document.createElement("tr");
+        row.style.height = "35px"; // match Gantt row height
+        row.innerHTML = `<td>${task.name}</td><td>${task.person}</td>`;
+        taskTableBody.appendChild(row);
     });
 }
 
@@ -29,7 +24,8 @@ function renderGanttAndTasks() {
     const gantt = new Gantt(ganttContainer, tasks, {
         view_mode: "Day",
         date_format: "YYYY-MM-DD",
-        on_render: () => renderTaskTable(gantt),
+        row_height: 35, // same as table row height
+        on_render: () => renderTaskTable(),
         custom_popup_html: task => `
       <div style="padding:10px;">
         <h5>${task.name}</h5>
@@ -42,12 +38,12 @@ function renderGanttAndTasks() {
     });
 }
 
-// Initial render after DOM ready
+// Initial render
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(renderGanttAndTasks, 50);
 });
 
-// Task creation
+// Add task
 document.getElementById("task-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const name = document.getElementById("task-name").value;

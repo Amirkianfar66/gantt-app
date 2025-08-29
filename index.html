@@ -25,27 +25,27 @@
 
         #container {
             display: flex;
-            height: 600px; /* fixed height for chart */
+            height: 600px; /* fixed height */
         }
 
         #task-table {
             width: 250px;
             border-right: 1px solid #ddd;
-            position: relative;
             overflow: auto;
-            padding: 5px;
-            box-sizing: border-box;
             background: #f9f9f9;
         }
 
-        .task-row {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            padding: 2px 4px;
-            box-sizing: border-box;
+        #task-table-inner th, #task-table-inner td {
+            padding: 5px;
             border-bottom: 1px solid #ccc;
             font-size: 13px;
+        }
+
+        #task-table-inner th {
+            text-align: left;
+            background: #eee;
+            position: sticky;
+            top: 0;
         }
 
         #gantt {
@@ -66,7 +66,17 @@
     </form>
 
     <div id="container">
-        <div id="task-table"></div>
+        <div id="task-table">
+            <table id="task-table-inner">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Person</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         <div id="gantt"></div>
     </div>
 
