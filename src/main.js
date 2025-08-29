@@ -21,33 +21,39 @@ function renderTaskTable() {
         row.style.height = ROW_HEIGHT + "px";
 
         row.innerHTML = `
-      <td contenteditable="true" data-field="name">${task.name}</td>
-      <td contenteditable="true" data-field="person">${task.person}</td>
-      <td contenteditable="true" data-field="start">${task.start}</td>
-      <td contenteditable="true" data-field="end">${task.end}</td>
-      <td contenteditable="true" data-field="progress">${task.progress}</td>
+      <td contenteditable="true" data-field="name" style="font-size:12px;">${task.name}</td>
+      <td contenteditable="true" data-field="person" style="font-size:12px;">${task.person}</td>
+      <td contenteditable="true" data-field="start" style="font-size:12px;">${task.start}</td>
+      <td contenteditable="true" data-field="end" style="font-size:12px;">${task.end}</td>
+      <td contenteditable="true" data-field="progress" style="font-size:12px;">${task.progress}</td>
+      <td><button class="delete-btn" style="font-size:12px;">X</button></td>
     `;
 
-        // Update task when cell is edited
-        row.querySelectorAll("td").forEach(td => {
+        // Update task on blur
+        row.querySelectorAll("td[contenteditable='true']").forEach(td => {
             td.addEventListener("blur", () => {
                 const field = td.dataset.field;
                 let value = td.innerText.trim();
 
-                // Progress validation
                 if (field === "progress") {
                     value = Math.min(Math.max(parseInt(value) || 0, 0), 100);
                 }
 
                 tasks[index][field] = value;
-
-                renderGantt(); // update chart
+                renderGantt();
             });
+        });
+
+        // Delete task on button click
+        row.querySelector(".delete-btn").addEventListener("click", () => {
+            tasks.splice(index, 1); // remove task from array
+            renderAll(); // re-render table and Gantt
         });
 
         taskTableBody.appendChild(row);
     });
 }
+
 
 // Render Gantt chart
 function renderGantt() {
